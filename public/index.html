@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processador de CSV</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de pagamento - Capa</h1>
+        <div id="drop-area" class="drop-area">
+            <p>Arraste e solte o arquivo CSV aqui ou</p>
+            <input type="file" id="csvFile" accept=".csv" style="display:none">
+            <button id="fileSelect">Selecione um arquivo</button>
+        </div>
+        <div id="file-info" class="file-info"></div>
+        <button id="uploadButton" style="display:none;">Processar CSV</button>
+        <div id="loading" class="loading" style="display:none;">Processando...</div>
+        <div id="reportContainer"></div>
+    </div>
+    <footer>
+        <img src="img/logo.webp" alt="Logo da empresa">
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
