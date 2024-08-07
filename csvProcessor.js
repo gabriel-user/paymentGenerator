@@ -1,10 +1,12 @@
 const csv = require('csv-parser');
-const fs = require('fs');
+const { Readable } = require('stream');
 
-function processCSVFile(filePath) {
+function processCSVBuffer(buffer) {
   return new Promise((resolve, reject) => {
     const results = [];
-    fs.createReadStream(filePath)
+    const readableStream = Readable.from(buffer.toString());
+
+    readableStream
       .pipe(csv())
       .on('data', (data) => results.push(data))
       .on('end', () => {
@@ -20,7 +22,7 @@ function processCSV(data) {
   const regularPayments = data.filter(row => row.nome !== "COMISSÃO CAPA");
   const groups = groupByContaCorrente(regularPayments);
   const groupedPayments = Object.values(groups).map(formatGroup);
-  
+
   return [...comissaoCapa, ...groupedPayments];
 }
 
@@ -57,8 +59,7 @@ Conta: 10.656-9
 Chave PIX: SUPORTE@CAPABR.COM.BR
 Tipo de conta: (x) Corrente ( ) Poupança
 CPF/CNPJ: 43.466.354/0001-39
-Valor do Pagamento: ${valorPagamento.toFixed(2)}
-`;
+Valor do Pagamento: ${valorPagamento.toFixed(2)}`;
 }
 
 function formatGroup(group) {
@@ -88,8 +89,9 @@ Conta: ${firstRow.contaCorrente}
 Chave PIX: ${firstRow.chavePix}
 Tipo de conta: (x) Corrente ( ) Poupança
 CPF/CNPJ: ${CNPJDaEmpresaRecebedora}
-Valor do Pagamento: ${valorPagamento.toFixed(2)}
-`;
+Valor do Pagamento: ${valorPagamento.toFixed(2)}`;
 }
 
-module.exports = { processCSVFile };
+module.exports = {
+  processCSVBuffer
+};

@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             loadingDiv.style.display = 'block';
             uploadButton.style.display = 'none';
-            dropArea.style.display = 'none'; // Oculta a área de drop
-            fileInfo.style.display = 'none'; // Oculta a informação do arquivo
+            dropArea.style.display = 'none';
+            fileInfo.style.display = 'none';
 
             const response = await fetch('/upload', {
                 method: 'POST',
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Erro:', error);
             alert('Ocorreu um erro ao processar o arquivo.');
-            resetUpload(); // Reseta o upload em caso de erro
+            resetUpload();
         } finally {
             loadingDiv.style.display = 'none';
         }
@@ -169,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingDiv.style.display = 'none';
         currentFile = null;
         
-        // Exibe novamente a área de drop e a informação do arquivo
         dropArea.style.display = 'flex';
         fileInfo.style.display = 'block';
     }
