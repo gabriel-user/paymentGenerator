@@ -39,10 +39,11 @@ function groupByContaCorrente(data) {
 
 function formatComissaoCapa(row) {
   const parseMiles = (value) => parseFloat(value.replace(/\./g, '').replace(',', '.'));
-  const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", ""));
+  const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
 
   const quantidadeMilhas = parseMiles(row.quantidadeMilhas);
   const valorMilheiro = parseMilesValue(row.valorMilheiro).toFixed(2);
+  console.log(valorMilheiro);
   const valorPagamento = (quantidadeMilhas / 1000) * valorMilheiro;
 
   return `Dados bancários para depósito - COMISSÃO CAPA
@@ -65,7 +66,7 @@ Valor do Pagamento: ${valorPagamento.toFixed(2)}`;
 function formatGroup(group) {
   const firstRow = group[0];
   const parseMiles = (value) => parseFloat(value.replace(/\./g, '').replace(',', '.'));
-  const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", ""));
+  const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
 
   const totalMiles = group.reduce((sum, row) => sum + parseMiles(row.quantidadeMilhas), 0);
   const valorMilheiro = parseMilesValue(firstRow.valorMilheiro).toFixed(2);
