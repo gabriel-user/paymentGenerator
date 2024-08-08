@@ -41,9 +41,8 @@ function formatComissaoCapa(row) {
   const parseMiles = (value) => parseFloat(value.replace(/\./g, '').replace(',', '.'));
   const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
 
-  const quantidadeMilhas = parseMiles(row.quantidadeMilhas);
+  const quantidadeMilhas = parseMiles(row["Saldo NEGOCIADO"]);
   const valorMilheiro = parseMilesValue(row.valorMilheiro).toFixed(2);
-  console.log(valorMilheiro);
   const valorPagamento = (quantidadeMilhas / 1000) * valorMilheiro;
 
   return `Dados bancários para depósito - COMISSÃO CAPA
@@ -68,7 +67,7 @@ function formatGroup(group) {
   const parseMiles = (value) => parseFloat(value.replace(/\./g, '').replace(',', '.'));
   const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
 
-  const totalMiles = group.reduce((sum, row) => sum + parseMiles(row.quantidadeMilhas), 0);
+  const totalMiles = group.reduce((sum, row) => sum + parseMiles(row["Saldo NEGOCIADO"]), 0);
   const valorMilheiro = parseMilesValue(firstRow.valorMilheiro).toFixed(2);
   const valorPagamento = (totalMiles / 1000) * parseFloat(valorMilheiro);
 
