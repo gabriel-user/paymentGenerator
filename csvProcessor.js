@@ -17,6 +17,7 @@ function processCSVBuffer(buffer) {
   });
 }
 
+
 function processCSV(data) {
   const comissaoCapa = data.filter(row => row.nome === "COMISSÃO CAPA").map(formatComissaoCapa);
   const regularPayments = data.filter(row => row.nome !== "COMISSÃO CAPA");
@@ -37,20 +38,29 @@ function groupByContaCorrente(data) {
   }, {});
 }
 
+function formatToBrazilianCurrency(number) {
+  return number.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+  });
+}
+
 function formatComissaoCapa(row) {
   const parseMiles = (value) => parseFloat(value.replace(/\./g, '').replace(',', '.'));
   const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
 
   const quantidadeMilhas = parseMiles(row["Saldo NEGOCIADO"]);
-  const valorMilheiro = parseMilesValue(row.valorMilheiro).toFixed(2);
+  const valorMilheiro = parseMilesValue(row.valorMilheiro);
   const valorPagamento = (quantidadeMilhas / 1000) * valorMilheiro;
 
   return `Dados bancários para depósito - COMISSÃO CAPA
 Nome Ofertante: LEANDRO MIQUERI DE CARVALHO
 CPF/CNPJ do Ofertante: 05844403673
 Companhia: ${row.ciaAerea}
-Quantidade de milhas: ${quantidadeMilhas}
-Milheiro: ${valorMilheiro}
+Quantidade de milhas: ${quantidadeMilhas.toLocaleString('pt-BR')}
+Milheiro: ${formatToBrazilianCurrency(valorMilheiro)}
 Pagamento será feito na conta: ( ) Titular do contrato ( ) Terceiro
 Nome completo: Capa Gestão & Negócios LTDA
 Banco: SICOOB-756
@@ -59,7 +69,7 @@ Conta: 10.656-9
 Chave PIX: SUPORTE@CAPABR.COM.BR
 Tipo de conta: (x) Corrente ( ) Poupança
 CPF/CNPJ: 43.466.354/0001-39
-Valor do Pagamento: ${valorPagamento.toFixed(2)}`;
+Valor do Pagamento: ${formatToBrazilianCurrency(valorPagamento)}`;
 }
 
 function formatGroup(group) {
@@ -68,7 +78,7 @@ function formatGroup(group) {
   const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
 
   const totalMiles = group.reduce((sum, row) => sum + parseMiles(row["Saldo NEGOCIADO"]), 0);
-  const valorMilheiro = parseMilesValue(firstRow.valorMilheiro).toFixed(2);
+  const valorMilheiro = parseMilesValue(firstRow.valorMilheiro);
   const valorPagamento = (totalMiles / 1000) * parseFloat(valorMilheiro);
 
   const maxmilhasLogins = group.map(row => row.maxmilhasLogin).join(', ');
@@ -79,8 +89,8 @@ function formatGroup(group) {
 Nome Ofertante: ${firstRow.nome}
 CPF/CNPJ do Ofertante: ${firstRow.cpf}
 Companhia: ${firstRow.ciaAerea}
-Quantidade de milhas: ${totalMiles}
-Milheiro: ${valorMilheiro}
+Quantidade de milhas: ${totalMiles.toLocaleString('pt-BR')}
+Milheiro: ${formatToBrazilianCurrency(valorMilheiro)}
 Pagamento será feito na conta: ( ) Titular do contrato ( ) Terceiro
 Nome completo: ${nomeDaEmpresa}
 Banco: ${firstRow.nomeDoBanco}
@@ -89,7 +99,7 @@ Conta: ${firstRow.contaCorrente}
 Chave PIX: ${firstRow.chavePix}
 Tipo de conta: (x) Corrente ( ) Poupança
 CPF/CNPJ: ${CNPJDaEmpresaRecebedora}
-Valor do Pagamento: ${valorPagamento.toFixed(2)}`;
+Valor do Pagamento: ${formatToBrazilianCurrency(valorPagamento)}`;
 }
 
 module.exports = {
