@@ -82,8 +82,8 @@ function formatGroup(group) {
   const valorPagamento = (totalMiles / 1000) * parseFloat(valorMilheiro);
 
   const maxmilhasLogins = group.map(row => row.maxmilhasLogin).join(', ');
-  const nomeDaEmpresa = firstRow.nomeDaEmpresa.length <= 1 ? firstRow.nome : firstRow.nomeDaEmpresa;
-  const CNPJDaEmpresaRecebedora = firstRow.CNPJDaEmpresaRecebedora.length <= 1 ? firstRow.cpf : firstRow.CNPJDaEmpresaRecebedora;
+  const nomeDaEmpresa = firstRow.nomeDaEmpresa.length <= 2 ? firstRow.nome : firstRow.nomeDaEmpresa;
+  const CNPJDaEmpresaRecebedora = firstRow.CNPJDaEmpresaRecebedora.length <= 7 ? firstRow.cpf : firstRow.CNPJDaEmpresaRecebedora;
 
   return `Dados bancários para depósito (${maxmilhasLogins})
 Nome Ofertante: ${firstRow.nome}
