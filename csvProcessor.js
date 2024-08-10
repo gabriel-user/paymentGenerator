@@ -47,6 +47,16 @@ function formatToBrazilianCurrency(number) {
   });
 }
 
+function formatCPF(chavePix) {
+  let chavePixNumbers = chavePix.replace(/[^0-9]/g, '');
+
+  while (chavePixNumbers.length < 11) {
+    chavePixNumbers = '0' + chavePixNumbers;
+  } 
+
+  return chavePixNumbers;
+}
+
 function formatComissaoCapa(row) {
   const parseMiles = (value) => parseFloat(value.replace(/\./g, '').replace(',', '.'));
   const parseMilesValue = (value) => parseFloat(value.replace("R", '').replace("$", "").replace(",", "."));
@@ -82,12 +92,14 @@ function formatGroup(group) {
   const valorPagamento = (totalMiles / 1000) * parseFloat(valorMilheiro);
 
   const maxmilhasLogins = group.map(row => row.maxmilhasLogin).join(', ');
+  const cpf = formatCPF(firstRow.cpf);
   const nomeDaEmpresa = firstRow.nomeDaEmpresa.length <= 2 ? firstRow.nome : firstRow.nomeDaEmpresa;
-  const CNPJDaEmpresaRecebedora = firstRow.CNPJDaEmpresaRecebedora.length <= 7 ? firstRow.cpf : firstRow.CNPJDaEmpresaRecebedora;
+  const CNPJDaEmpresaRecebedora = firstRow.CNPJDaEmpresaRecebedora.length <= 7 ? formatCPF(firstRow.cpf) : firstRow.CNPJDaEmpresaRecebedora;
+  const chavePix = firstRow.tipoDeChavePix == "CPF" ? formatCPF(firstRow.chavePix) : firstRow.chavePix;
 
   return `Dados bancários para depósito (${maxmilhasLogins})
 Nome Ofertante: ${firstRow.nome}
-CPF/CNPJ do Ofertante: ${firstRow.cpf}
+CPF/CNPJ do Ofertante: ${cpf}
 Companhia: ${firstRow.ciaAerea}
 Quantidade de milhas: ${totalMiles.toLocaleString('pt-BR')}
 Milheiro: ${formatToBrazilianCurrency(valorMilheiro)}
@@ -96,7 +108,7 @@ Nome completo: ${nomeDaEmpresa}
 Banco: ${firstRow.nomeDoBanco}
 Agência: ${firstRow.agencia}
 Conta: ${firstRow.contaCorrente}
-Chave PIX: ${firstRow.chavePix}
+Chave PIX: ${chavePix}
 Tipo de conta: (x) Corrente ( ) Poupança
 CPF/CNPJ: ${CNPJDaEmpresaRecebedora}
 Valor do Pagamento: ${formatToBrazilianCurrency(valorPagamento)}`;
