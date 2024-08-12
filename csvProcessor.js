@@ -93,8 +93,8 @@ function formatGroup(group) {
 
   const maxmilhasLogins = group.map(row => row.maxmilhasLogin).join(', ');
   const cpf = formatCPF(firstRow.cpf);
-  const nomeDaEmpresa = firstRow.nomeDaEmpresa.length <= 2 ? firstRow.nome : firstRow.nomeDaEmpresa;
-  const CNPJDaEmpresaRecebedora = firstRow.CNPJDaEmpresaRecebedora.length <= 7 ? formatCPF(firstRow.cpf) : firstRow.CNPJDaEmpresaRecebedora;
+  const nomeDaEmpresa = firstRow.nomeDaEmpresa && firstRow.nomeDaEmpresa.length > 2 ? firstRow.nomeDaEmpresa : firstRow.nome;
+  const CNPJDaEmpresaRecebedora = firstRow.CNPJDaEmpresaRecebedora && firstRow.CNPJDaEmpresaRecebedora.length > 7 ? firstRow.CNPJDaEmpresaRecebedora : formatCPF(firstRow.cpf);
   const chavePix = firstRow.tipoDeChavePix == "CPF" ? formatCPF(firstRow.chavePix) : firstRow.chavePix;
 
   return `Dados bancários para depósito (${maxmilhasLogins})
